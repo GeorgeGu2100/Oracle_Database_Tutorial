@@ -20,3 +20,5 @@ WHERE  s.type != 'BACKGROUND'
 order by SQL_EXEC_START 
 ;
 
+-- kill a sesssion with sid 262 and serial number 51021
+ALTER SYSTEM KILL SESSION '262,51021'; 
