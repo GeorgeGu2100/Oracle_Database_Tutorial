@@ -9,11 +9,14 @@ SELECT s.inst_id,
        s.username,
        s.program,
        s.SQL_EXEC_START,
-       SYSDATE,
-       (SYSDATE-s.SQL_EXEC_START)*24*60 as ELAPSED_MINUTES,
+--       SYSDATE,
+       ROUND((SYSDATE-s.SQL_EXEC_START)*24*60,2) as ELAPSED_MINUTES,
        CAST(SYSDATE as timestamp),
-       CAST(s.SQL_EXEC_START as timestamp),   
-       CAST(SYSDATE as timestamp) - CAST(s.SQL_EXEC_START as timestamp) as ELAPSED       -- (DD HH:MM:SS)
+       CAST(s.SQL_EXEC_START as timestamp),
+       CAST(SYSDATE as timestamp) - CAST(s.SQL_EXEC_START as timestamp) as ELAPSED,       -- (DD HH:MM:SS)
+       extract( day from CAST(SYSDATE as timestamp) - CAST(s.SQL_EXEC_START as timestamp)) Days   ,
+       extract( minute from CAST(SYSDATE as timestamp) - CAST(s.SQL_EXEC_START as timestamp)) Minute,  
+       extract( second from CAST(SYSDATE as timestamp) - CAST(s.SQL_EXEC_START as timestamp)) second                       
 FROM   gv$session s
        JOIN gv$process p ON p.addr = s.paddr AND p.inst_id = s.inst_id
 WHERE  s.type != 'BACKGROUND'
